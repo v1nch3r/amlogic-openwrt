@@ -1016,16 +1016,6 @@ EOF
         sed -i "s/macaddr=.*/macaddr=${random_macaddr}:08/" "brcmfmac4359-sdio.ali,ct2000.txt"
     )
 
-    # Add firmware version information to the terminal page
-    [[ -n "${builder_name}" ]] && builder_display="Builder Name: ${builder_name} | " || builder_display=""
-    [[ -f "etc/banner" ]] && {
-        echo " Install OpenWrt: System → Amlogic Service → Install OpenWrt" >>etc/banner
-        echo " Update  OpenWrt: System → Amlogic Service → Online  Update" >>etc/banner
-        echo " Board: ${board} | OpenWrt Kernel: ${kernel_name}" >>etc/banner
-        echo " ${builder_display}Production Date: $(date +%Y-%m-%d)" >>etc/banner
-        echo "───────────────────────────────────────────────────────────────────────" >>etc/banner
-    }
-
     # Add firmware information
     echo "PLATFORM='${PLATFORM}'" >>${op_release}
     echo "MODEL_ID='${MODEL_ID}'" >>${op_release}
