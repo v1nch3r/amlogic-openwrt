@@ -94,6 +94,7 @@ stable_kernel=("6.1.1" "5.15.1")
 flippy_kernel=(${stable_kernel[@]})
 dev_kernel=(${stable_kernel[@]})
 beta_kernel=(${stable_kernel[@]})
+kernel.org_kernel=(${stable_kernel[@]})
 specific_kernel=()
 # Set to automatically use the latest kernel
 auto_kernel="true"
@@ -204,6 +205,7 @@ init_var() {
                 stable_kernel=(${2})
                 dev_kernel=(${2})
                 beta_kernel=(${2})
+		kernel.org_kernel=(${2})
                 specific_kernel=(${2})
                 IFS="${oldIFS}"
                 shift
@@ -427,6 +429,7 @@ query_kernel() {
             flippy) down_kernel_list=(${flippy_kernel[@]}) ;;
             dev) down_kernel_list=(${dev_kernel[@]}) ;;
             beta) down_kernel_list=(${beta_kernel[@]}) ;;
+            kernel.org) down_kernel_list=(${kernel.org_kernel[@]}) ;;
             rk3588) down_kernel_list=(${rk3588_kernel[@]}) ;;
             rk35xx) down_kernel_list=(${rk35xx_kernel[@]}) ;;
             h6) down_kernel_list=(${h6_kernel[@]}) ;;
@@ -471,6 +474,7 @@ query_kernel() {
             flippy) flippy_kernel=(${tmp_arr_kernels[@]}) ;;
             dev) dev_kernel=(${tmp_arr_kernels[@]}) ;;
             beta) beta_kernel=(${tmp_arr_kernels[@]}) ;;
+            kernel.org) kernel.org_kernel=(${tmp_arr_kernels[@]}) ;;
             rk3588) rk3588_kernel=(${tmp_arr_kernels[@]}) ;;
             rk35xx) rk35xx_kernel=(${tmp_arr_kernels[@]}) ;;
             h6) h6_kernel=(${tmp_arr_kernels[@]}) ;;
@@ -515,6 +519,7 @@ download_kernel() {
             flippy) down_kernel_list=(${flippy_kernel[@]}) ;;
             dev) down_kernel_list=(${dev_kernel[@]}) ;;
             beta) down_kernel_list=(${beta_kernel[@]}) ;;
+            kernel.org) down_kernel_list=(${kernel.org_kernel[@]}) ;;
             rk3588) down_kernel_list=(${rk3588_kernel[@]}) ;;
             rk35xx) down_kernel_list=(${rk35xx_kernel[@]}) ;;
             h6) down_kernel_list=(${h6_kernel[@]}) ;;
@@ -1016,6 +1021,16 @@ EOF
         sed -i "s/macaddr=.*/macaddr=${random_macaddr}:08/" "brcmfmac4359-sdio.ali,ct2000.txt"
     )
 
+    # Add firmware version information to the terminal page
+    [[ -n "${builder_name}" ]] && builder_display="Builder Name: ${builder_name} | " || builder_display=""
+    [[ -f "etc/banner" ]] && {
+        echo " Install OpenWrt: System → Amlogic Service → Install OpenWrt" >>etc/banner
+        echo " Update  OpenWrt: System → Amlogic Service → Online  Update" >>etc/banner
+        echo " Board: ${board} | OpenWrt Kernel: ${kernel_name}" >>etc/banner
+        echo " ${builder_display}Production Date: $(date +%Y-%m-%d)" >>etc/banner
+        echo "───────────────────────────────────────────────────────────────────────" >>etc/banner
+    }
+
     # Add firmware information
     echo "PLATFORM='${PLATFORM}'" >>${op_release}
     echo "MODEL_ID='${MODEL_ID}'" >>${op_release}
@@ -1091,6 +1106,7 @@ loop_make() {
             flippy) kernel_list=(${flippy_kernel[@]}) ;;
             dev) kernel_list=(${dev_kernel[@]}) ;;
             beta) kernel_list=(${beta_kernel[@]}) ;;
+            kernel.org) kernel_list=(${kernel.org_kernel[@]}) ;;
             rk3588) kernel_list=(${rk3588_kernel[@]}) ;;
             rk35xx) kernel_list=(${rk35xx_kernel[@]}) ;;
             h6) kernel_list=(${h6_kernel[@]}) ;;
